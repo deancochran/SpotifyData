@@ -1,0 +1,89 @@
+html{
+    background-color: black
+}
+#webtitle{
+    color: white
+}
+
+.dropbtn {
+  background-color: springgreen;
+  color: black;
+  width: 150%;
+  height: 40px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: lightseagreen;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  outline-color: black;
+  outline-style: solid;
+  outline-offset: inherit;
+    
+    
+}
+
+.dropdown-content span {
+  color: black;
+  padding: 9px 10px;
+  display: block;
+  outline-color: black;
+  outline: inherit;
+}
+
+.dropdown span:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+
+
+#list_div
+{
+    
+    background-color:red;
+    float: right;
+    width: 30%;
+    height: 700px; 
+    
+    
+    
+}
+
+#chart_div
+{
+    margin-left: -px;
+    background-color:white;
+    float: left;
+    width: 70%;
+    height: 700px;
+}
+
+#filters_div
+{
+    background-color:blue;
+
+    clear: right;
+    clear: left;
+}
+
+.footer{
+    background-color:greenyellow;
+    float: left;
+    height: 150px;
+    width: 100%;
+
+}
