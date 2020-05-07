@@ -81,7 +81,6 @@ var drawToolTip = function(song){
         .classed("song-title",true)
         .text(song.track_name+', by '+song.artist_name);
 
-    console.log('hey')
     var info= summary.append("div")
         .classed("song-info",true)
         .append("ul")
@@ -97,7 +96,7 @@ var drawToolTip = function(song){
         .text('Popularity Rating: '+song.popularity+' out of 100.');
     info.append("li")
         .classed("tempo-info",true)
-        .text('Tempo of song: '+ (song.tempo).toFixed(1));
+        .text('Tempo of song: '+ (song.tempo));
     info.append("li")
         .classed("key-info",true)
         .text('Key of song: '+ song.key);
@@ -127,11 +126,12 @@ var updateGraph= function(songs, target, margins, graph)
     var colorScale = scales.colorScale;
     
     updateAxes(target,xScale,yScale);
-    
-    var circles = d3.select(target)
-    .select(".graph")
-    .selectAll("circle")
-    .data(songs)
+
+    var svg = d3.select(target)
+        .select(".graph")
+
+    var circles = svg.selectAll("circle")
+            .data(songs)
     
     
     //ENTER - add new stuff
@@ -140,10 +140,28 @@ var updateGraph= function(songs, target, margins, graph)
         .classed("circle",true)
         .on("mouseover",function(song)
             {
+                if(! d3.select(this).classed("off"))
+                {
+                    d3.selectAll(".circle")
+                    .classed("fade",true);
+
+                    d3.select(this)
+                        .classed("fade",false)
+                        .classed("raise",true)
+                        .raise() //move to topc
+                }
                 drawToolTip(song)
             })
         .on("mouseout",function(song)
             {
+                if(! d3.select(this).classed("off"))
+                {
+
+                    d3.selectAll(".circle")
+                        .classed("fade",false)
+                        .classed("raise",false);
+                }
+        
                 d3.select("#tooltip")
                         .classed("hidden",true);  
             })
@@ -158,24 +176,72 @@ var updateGraph= function(songs, target, margins, graph)
     .duration(dur)
     .attr("cx",function(song)
     {
-        return xScale(song.tempo);
+        return xScale(song.danceability *100);
     })
     .attr("cy",function(song)
     {
-        return yScale(song.danceability *100);
+        return yScale(song.popularity);
 
     })
     .attr("r",function(song)
     {
-        return rScale(song.popularity);         
+        return rScale(song.energy);         
     })
     
-    .attr("fill",function(song)
+    .attr("fill", function(song)
     {
-        return colorScale(song.valence);
-    })
+        return colorScale(song.valence);         
+    }) 
+    .attr("stroke", 'black')
+    .attr("stroke-width",.5)
     
     
+    var lines = svg.selectAll("line")
+            .data(songs)
+    
+    //ENTER - add new stuff
+    lines.enter()
+        .append("line")
+        .classed("line",true)
+        .on("mouseover",function(song)
+            {
+                if(! d3.select(this).classed("off"))
+                {
+                    d3.selectAll(".circle")
+                    .classed("fade",true);
+
+                    d3.select(this)
+                        .classed("fade",false)
+                        .raise() //move to top
+                }
+            })
+        .on("mouseout",function(song)
+            {
+                if(! d3.select(this).classed("off"))
+                {
+
+                    d3.selectAll(".circle")
+                        .classed("fade",false);
+                }
+            })
+    
+    //EXIT - remove old stuff
+    lines.exit()
+        .remove();
+    
+    //UPDATE - REDECORATE 
+    lines.transition() 
+    .duration(dur)
+    .attr("x1",-20)
+    .attr("x2",graph.width + 50)
+    .attr("y1",yScale(d3.mean(songs,function(song){
+        return song.popularity
+    })))
+    .attr("y2",yScale(d3.mean(songs,function(song){
+        return song.popularity
+    })))
+    .attr("stroke","black")
+    .attr("stroke-width",2)
     
         
 }
@@ -185,10 +251,6 @@ var updateGraph= function(songs, target, margins, graph)
 var recalculateScales = function(songs, margins, graph)
 {
     var xScale = d3.scaleLinear()
-                .domain([20,240])
-                .range([0,graph.width])
-    
-    var yScale = d3.scaleLinear()
                 .domain([
                         d3.min(songs,function(song)
                         {
@@ -199,15 +261,23 @@ var recalculateScales = function(songs, margins, graph)
                                 return song.danceability *100;
                         })
                         ])
+                .range([0,graph.width])
+    
+    var yScale = d3.scaleLinear()
+                .domain([0,100])
                 .range([graph.height,0]);
     var rScale = d3.scaleSqrt()
                 .domain([
-                        0,
+                        d3.min(songs,function(song)
+                        {
+                                return song.energy;
+                        }),
                         d3.max(songs,function(song)
                         {
-                                return song.popularity;
-                        })])
-    rScale.range([2,10])
+                                return song.energy;
+                        })
+                        ])
+    rScale.range([2,15])
     var colorScale = d3.scaleSequential()
                         .domain([
                         d3.min(songs,function(song)
@@ -219,7 +289,7 @@ var recalculateScales = function(songs, margins, graph)
                                 return song.valence;
                         })
                         ])
-                        .interpolator(d3.interpolateWarm);
+                        .interpolator(d3.interpolateRainbow)
     
     return { xScale:xScale, yScale:yScale, rScale:rScale, colorScale:colorScale}
 }
@@ -237,27 +307,18 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Movie')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#RnB')
     .on("click",function()
         {
         var new_songs = songs.filter(function(song){
-            if(song.genre=='R&B')
+            if(song.genre=='RnB')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
-        updateGraph(new_songs, target, margins, graph);
-        });
-    d3.select('#ACapella')
-    .on("click",function()
-        {
-        var new_songs = songs.filter(function(song){
-            if(song.genre=='A Capella')
-                    {return true;}
-            })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        console.log(new_songs)
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Alternative')
@@ -267,7 +328,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Alternative')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Country')
@@ -277,7 +338,8 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Country')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        console.log(new_songs)
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Dance')
@@ -287,7 +349,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Dance')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Electronic')
@@ -297,17 +359,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Electronic')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
-        updateGraph(new_songs, target, margins, graph);
-        });
-    d3.select('#Anime')
-    .on("click",function()
-        {
-        var new_songs = songs.filter(function(song){
-            if(song.genre=='Anime')
-                    {return true;}
-            })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Folk')
@@ -317,7 +369,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Folk')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Blues')
@@ -327,7 +379,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Blues')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Opera')
@@ -337,17 +389,17 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Opera')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#HipHop')
     .on("click",function()
         {
         var new_songs = songs.filter(function(song){
-            if(song.genre=='Hip-Hop')
+            if(song.genre=='HipHop')
                     {return true;}
             })
-        setBanner('Songs that will go well in your Hip-Hop playlist');
+        //setBanner('Songs that will go well in your Hip-Hop playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Rap')
@@ -357,7 +409,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Rap')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Indie')
@@ -367,17 +419,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Indie')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
-        updateGraph(new_songs, target, margins, graph);
-        });
-    d3.select('#Classical')
-    .on("click",function()
-        {
-        var new_songs = songs.filter(function(song){
-            if(song.genre=='Classical')
-                    {return true;}
-            })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Pop')
@@ -387,7 +429,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Pop')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Reggae')
@@ -397,7 +439,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Reggae')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Reggaeton')
@@ -407,7 +449,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Reggaeton')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Jazz')
@@ -417,7 +459,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Jazz')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Rock')
@@ -427,7 +469,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Rock')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Ska')
@@ -437,7 +479,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Ska')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
     d3.select('#Soul')
@@ -447,27 +489,7 @@ var initButtons = function(margins, graph, songs,target)
             if(song.genre=='Soul')
                     {return true;}
             })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
-        updateGraph(new_songs, target, margins, graph);
-        });
-    d3.select('#Soundtrack')
-    .on("click",function()
-        {
-        var new_songs = songs.filter(function(song){
-            if(song.genre=='Soundtrack')
-                    {return true;}
-            })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
-        updateGraph(new_songs, target, margins, graph);
-        });
-    d3.select('#World')
-    .on("click",function()
-        {
-        var new_songs = songs.filter(function(song){
-            if(song.genre=='World')
-                    {return true;}
-            })
-        setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
+        //setBanner('Songs that will go well in your '+ new_songs[0].genre +' playlist');
         updateGraph(new_songs, target, margins, graph);
         });
 
@@ -482,10 +504,10 @@ var initButtons = function(margins, graph, songs,target)
 var initGraph = function(target,songs)
 {
     //the size of the screen
-    var screen = {width:800, height:600};
+    var screen = {width:850, height:450};
     
     //how much space will be on each side of the graph
-    var margins = {top:15,bottom:40,left:70,right:15};
+    var margins = {top:15,bottom:50,left:100,right:15};
     
     //generated how much space the graph will take up
     var graph = 
@@ -534,13 +556,13 @@ var createAxes = function(margins,graph,target)
     axes.append("g")
         .attr("id","xAxis")
         .attr("transform","translate("+margins.left+","
-             +(margins.top+graph.height)+")")
+             +(margins.top+graph.height+20)+")")
         
     
     
     axes.append("g")
         .attr("id","yAxis")
-        .attr("transform","translate("+margins.left+","
+        .attr("transform","translate("+(margins.left-20)+","
              +(margins.top)+")")
         
 }
@@ -563,6 +585,8 @@ var updateAxes = function(target,xScale,yScale)
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
+
+/*
 //sets the new title to whatever plot is displayed
 var setBanner = function(msg)
 {
@@ -570,7 +594,7 @@ var setBanner = function(msg)
     d3.select("#banner")
         .text(msg);
 }
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
