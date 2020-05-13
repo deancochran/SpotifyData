@@ -17,16 +17,15 @@
     </head>
     
     <!-- Website Title -->
-    <h1 id='webtitle'>Playlist Creation Station</h1>
+    <h1 id='webtitle' class='glow'>Playlist Creation Station</h1>
     
     <!-- creating body for website -->
     <body class='body'>
         
         <div id='filters_div' class='mid_body'> 
-            <h3 class='header'> Filters</h3>
-            <div class="dropdown">
-                <button onclick="myFunction()" id='genre_button' class='dropbtn'>Select Genre</button>
-                <div id="myDropdown" class="dropdown-content">
+                <div id="genres" class="filter">
+                    <h4> Select a genre filter:</h4>
+                    <div  class='filter_div'>
                     <span id='Movie'> Movie</span>
                     <span id='RnB'> RnB </span>
                     <span id='Country'> Country </span>
@@ -44,23 +43,60 @@
                     <span id='Jazz'> Jazz </span>
                     <span id='Rock'> Rock </span>
                     <span id='Ska'> Ska </span>
-                    <span id='Soul'> soul </span>
+                    <span id='Soul'> Soul </span>
+                    </div>
                 </div>
+                <div id="popularity" class="filter">
+                    <h4> Select a popularity filter:</h4>
+                    <div class='filter_div'>
+                    <span id='pop1'> more than 25%</span>
+                    <span id='pop2'> more than 50% </span>
+                    <span id='pop3'> more than 75% </span>
+                    </div>
+                </div>
+                <div id="danceability" class="filter">
+                    <h4> Select a danceability filter:</h4>
+                    <div class='filter_div'>
+                    <span id='dance1'> more than 25%</span>
+                    <span id='dance2'> more than 50% </span>
+                    <span id='dance3'> more than 75% </span>
+                    </div>
+                </div>
+                <div id="positivity" class="filter">
+                    <h4> Select a positivity filter:</h4>
+                    <div class='filter_div'>
+                    <span id='pos1'> more than 25%</span>
+                    <span id='pos2'> more than 50% </span>
+                    <span id='pos3'> more than 75% </span>
+                    </div>
+                </div>
+        </div>
+        <div id="search_div">
+                    <div class='filter_div'>
+                    <span id='Search'> SEARCH </span>
+                    <span id='Reset'> RESET </span>
+                    
+                    </div>
+            <div class='link_div'> 
+            <a class='link' href="instructions.html"> Link to Instructions</a>
             </div>
         </div>
-        
         <!-- Creating Bubble Chart -->
         <div id='chart_div' class='mid_body'>
+            <h3 id='banner' class='header'>Select filters to add songs to your playlist</h3>
             <svg id="bubblechart"></svg>
         </div>
         
         <!-- Creating Playlist visual -->
         <div id='list_div'>
-            <h3 class='header'>Your Playlist</h3>
+            <h3 id='playlist_name' class='list_header'>
+                Select filters to add songs to your playlist
+            </h3>
+            <div id='playlist_description' class='list_header'> </div>
             <div id='playlist'> 
-                <ol id='list'>
-                    <li> example song, example name... remove me later</li>
-                </ol>
+                <ul id='list'>
+                    
+                </ul>
             </div>
         </div>
         
@@ -69,9 +105,10 @@
     <!-- creating footer for website -->
     <footer class='footer'>
         <div id="tooltip">
+            
         </div>
     </footer>
     
     
-        <script src="script.js"></script>
+        <script src="scriptv2.js"> </script>
 </html>
