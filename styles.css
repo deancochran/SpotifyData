@@ -4,9 +4,25 @@ html{
     
 }
 
+.instruction_body a{
+    margin-left: 76%;
+    align-content: center;
+}
+#instruction_title{
+    margin-left: 35%;
+    align-content: center;
+}
+
 .instruction_div{
     font-size: 25px;
+    width: 70%;
+    margin-left: 15%;
 }
+
+.instruction_div ul li{
+    margin-bottom: 10px;
+}
+
 #webtitle{
     color: white;
     margin-bottom: 10px;
@@ -100,11 +116,12 @@ html{
 
 #banner{
     margin-left: 30%;
-    margin-top: -1px;
+    margin-top: 12px;
 }
 
 #bubblechart{
-    margin-top: -30px;
+    margin-top: -15px;
+    margin-left: 150px;
 }
 
 #filters_div
@@ -136,6 +153,7 @@ html{
     border: 5px solid;
     border-color: black;
     margin-top: 20px;
+    margin-left: 10%;
 }
 
 #playlist{
