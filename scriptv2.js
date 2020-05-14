@@ -93,16 +93,17 @@ var createLabels = function(margins,graph,target)
     
     var xlabel = d3.select(target.chart_id)
         .append("g")
-        .classed("class","labels");
+        .attr("class", "axisWhite")
     
     xlabel.append("text")
         .text('Danceability Rating')
+        .attr("class", "axisWhite")
         .attr("transform","translate("+(graph.width/2)+","
              +(graph.height+margins.bottom+10)+")")
     
     var ylabel = d3.select(target.chart_id)
         .append("g")
-        .classed("class","labels")
+        .attr("class", "axisWhite")
         .attr("transform","translate("+(margins.left/2)+","
              +((graph.height/2)+80)+")")
     
@@ -777,16 +778,7 @@ var recalculateScales = function(songs, margins, graph)
                 .domain([0,1])
                 .range([1,15])
     var colorScale = d3.scaleSequential()
-                        .domain([
-                        d3.min(songs,function(song)
-                        {
-                                return song.valence;
-                        }),
-                        d3.max(songs,function(song)
-                        {
-                                return song.valence;
-                        })
-                        ])
+                        .domain([0,1])
                         .interpolator(d3.interpolateWarm)
     
     return { xScale:xScale, yScale:yScale, rScale:rScale, colorScale:colorScale}
@@ -802,11 +794,13 @@ var updateAxes = function(xScale,yScale)
     d3.select("#xAxis")
         .transition()
         .duration(dur)
+        .attr("class", "axisWhite")
         .call(xAxis)
     
     d3.select("#yAxis")
         .transition()
         .duration(dur)
+        .attr("class", "axisWhite")
         .call(yAxis)
 }
 
@@ -1059,7 +1053,7 @@ var drawToolTip = function(song,scales){
         .text('Acousticness: '+  (song.acousticness*100).toFixed(1)+'%');
     info2.append("li")
         .classed("time-signature",true)
-        .text('Key of song: '+ song.time_signature);
+        .text('Time-Signature: '+ song.time_signature);
     
     d3.select('.footer')
     .style('background-color',colorScale(song.valence));

@@ -1,7 +1,26 @@
 html{
-    background-color: floralwhite;
     font-family: Helvetica, sans-serif;
-    
+    background: black
+}
+#instruct{
+    font-family: Helvetica, sans-serif;
+    background: floralwhite;;
+}
+#instruct a{
+    font-size: 20px
+}
+
+#instruct-title{
+    overflow: scroll;
+    color: black;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    padding-left: 25%;
+    font-size: 80px;
+    font-weight: bold;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+    border-color: black;
 }
 
 .instruction_body a{
@@ -14,29 +33,33 @@ html{
 }
 
 .instruction_div{
+    overflow: scroll;
     font-size: 25px;
     width: 70%;
     margin-left: 15%;
 }
 
 .instruction_div ul li{
+    overflow: scroll;
     margin-bottom: 10px;
 }
 
 #webtitle{
+    overflow: scroll;
     color: white;
     margin-bottom: 10px;
-    margin-top: 50px;
+    margin-top: 0px;
     padding-left: 25%;
     font-size: 80px;
-    color: black;
     font-weight: bold;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
 }
 
 
 .filter_div span{
-    background-color: floralwhite;
-    border: 2px solid black;
+    overflow: scroll;
+    background-color: white;
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 10px;
@@ -45,6 +68,9 @@ html{
     padding-bottom: 2px;
     margin-left: 2px;
     margin-left: 2px;
+    cursor: pointer;
+    border: 2px solid #000000;
+    border-radius: 40px 40px 40px 40px;
 }
 
 .filter_div span:hover{
@@ -56,6 +82,13 @@ html{
     margin-bottom: 10px;
     margin-left: 30%;
     font-size: 20px;
+    color: white;
+}
+
+#genres h4{
+    margin-left: 45%;
+    color: white;
+    
 }
 #genres{
     margin-top: 20px;
@@ -72,51 +105,39 @@ html{
     float: left;
 }
 
-#search_div{
- margin-left: 10%
-}
-
-#search_div h4{
-    margin-left: 30%;
-}
-#search_div span{
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    
-    
-}
-
 
 #list_div
 {
     float: right;
-    width: 30%;
-    height: 650px; 
+    width: 25%;
+    height: 670px; 
     overflow: scroll;
-    margin-right: 3%;
-    margin-left: -3%;
-    background-color: floralwhite;
-    border-top: 5px solid;
-    border-color: black;
+    margin-left: -10%;
+    margin-right: 2%;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+    border-color: white;
     
 }
 
 #chart_div
 {
+    overflow: scroll;
     background-color:white;
     float: left;
     width: 70%;
     height: 500px;
-    background-color: floralwhite;
-    border-top: 5px solid;
-    border-color: black;
+    background-color: black;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+
 }
+
 
 #banner{
     margin-left: 30%;
     margin-top: 12px;
+    color: white;
 }
 
 #bubblechart{
@@ -126,17 +147,26 @@ html{
 
 #filters_div
 {
+    overflow: scroll;
     height: 150px;
     float: left;
-    background-color: floralwhite;
+    background-color: black;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+    border-color: white;
 }
 
-#search_div{
-    margin-top: 3%;
-    margin-left: 12%;
-    width: auto;
+#searches{
+    overflow: scroll;
+    margin-right: auto;
+    margin-left: 3%;
+    height: 145px;
+    width: 20%;
     float: left;
-    background-color: floralwhite;
+    background-color: black;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+    border-color: white;
 }
 
 .link_div{
@@ -147,13 +177,13 @@ html{
 }
 
 .footer{
+    overflow: scroll;
     float: left;
     height: 150px;
-    width: 45%;
-    border: 5px solid;
-    border-color: black;
-    margin-top: 20px;
-    margin-left: 10%;
+    width: 70%;
+    margin-top: 10px;
+    border: 10px solid #000000;
+    border-radius: 40px 40px 40px 40px;
 }
 
 #playlist{
@@ -164,19 +194,22 @@ html{
 }
 
 li{
-    border: 1px solid;
-    border-color: black;
     padding-bottom: 3px;
     padding-top: 3px;
     margin-bottom: 1px;
-    
+    border: 1px solid #000000;
+       
 }
 
 #playlist_name{
-    margin-left: 37%;
+    margin-left: 20%;
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: white;
 }
 #playlist_description{
-    margin-left: 37%;
+    margin-left: 30%;
+    color: white;
 }
 
 
@@ -191,13 +224,20 @@ li{
 }
 
 #song_id{
-    width: 50%;
+    width: 150px;
     font-size: 20px;
     text-decoration: underline;
+    margin-top: 1%;
     margin-left: 2%;
 }
+
+.song{
+    cursor: pointer;
+    padding-left: 10px;
+}
+
 .song-title{
-    font-size: 25px;
+    font-size: 30px;
     font-weight: bold;
     width: 40%;
     float: left;
@@ -220,10 +260,52 @@ li{
     margin-top: -30px;
     display: block;
     width: 25%;
-    
 }
 
 .filter-title{
     margin-bottom: -10px;
     margin-top: -10px;
 }
+
+.search_div span{
+    background-color: white;
+    float: left;
+    margin-top: 20px;
+    margin-left: 30px;
+    font-size: 25px;
+    padding: 20px;
+    cursor: pointer;
+    border: 2px solid #000000;
+    border-radius: 40px 40px 40px 40px;
+}
+
+
+.search_div span:hover{
+    background-color: lightgray;
+}
+
+.link_div{
+    margin-top: 10px;
+    margin-left: 60px;
+}
+
+.link_div a{
+    font-size: 30px;
+    color: blue;
+}
+.link_div a:hover{
+    color: red;
+}
+
+
+.axisWhite line{
+  stroke: white;
+}
+
+.axisWhite path{
+  stroke: white;
+}
+
+.axisWhite text{
+  fill: white;
+}  
