@@ -184,6 +184,7 @@ html{
 
 .footer{
     overflow: scroll;
+    display: block;
     float: left;
     height: 250px;
     width: 70%;
