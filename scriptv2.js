@@ -648,6 +648,7 @@ var initButtons = function(margins, graph, songs, target)
     d3.select('#Search')
     .on("click",function()
         {
+            
             var new_songs = songs.filter(function(song)
                 {
                     if(song.genre==rules[0])
@@ -707,10 +708,12 @@ var initButtons = function(margins, graph, songs, target)
                 .classed("fade",false);
         
                 d3.select('#Search')
-                .classed("fade",false);
+                .classed("fade",false)
         
                 d3.select('#Reset')
-                .classed("fade",false);
+                .classed("fade",false)
+                
+                
             }
             else{
                 setBanner('NO RESULTS...    (Please reduced your filter settings)')
@@ -975,6 +978,7 @@ var updateList= function(songs, target, scales)
             {
                 return colorScale(song.valence);         
             })
+    
     
 }
 
