@@ -11,6 +11,7 @@ var sucFCN = function(songs){
                 playlist_id:'#playlist'}
     initGraph(target,songs);
     console.log('Reached: initialized First graph')
+    d3.select('#loading').remove()
 }
 //on failure
 var failFCN = function(err){
@@ -712,7 +713,7 @@ var initButtons = function(margins, graph, songs, target)
                 .classed("fade",false);
             }
             else{
-                setBanner('NO RESULTS...Please reduced your filter settings')
+                setBanner('NO RESULTS...    (Please reduced your filter settings)')
             }
             
     });

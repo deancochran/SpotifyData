@@ -262,6 +262,13 @@ li{
     width: 25%;
 }
 
+.song-info li{
+    padding-left: 10px;
+}
+.song-info2 li{
+    padding-left: 10px;
+}
+
 .filter-title{
     margin-bottom: -10px;
     margin-top: -10px;
