@@ -3,4 +3,4 @@
 ##### See CSC_DataSet_Analysis
 
 ##### Follow the link:
-deancochran.github.io/spotifydata/creation_station.html
+https://deancochran.github.io/SpotifyData/Creation_Station.html
